@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hydra Shop - Catálogo de Jogos</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        .container { display: flex; }
+        .sidebar { width: 250px; background: #222; color: white; padding: 20px; }
+        .sidebar h2, .sidebar p { margin: 0 0 15px; }
+        .catalogo { flex-grow: 1; display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; }
+        .jogo { width: 200px; border: 1px solid #ddd; padding: 10px; text-align: center; background: #fff; }
+        .jogo img { width: 100%; height: auto; }
+        .preco { font-weight: bold; }
+        .avaliacao { color: gold; }
+        .filtros { margin-bottom: 20px; }
+        select, button, input { margin: 5px 0; padding: 5px; width: 100%; }
+        .trailer-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        .trailer-modal video { width: 100%; height: auto; }
+        .close-btn { background: red; color: white; border: none; padding: 5px; cursor: pointer; }
+    </style>
+    <script>
+        function filtrarJogos() {
+            let minPreco = parseFloat(document.getElementById('minPreco').value) || 0;
+            let maxPreco = parseFloat(document.getElementById('maxPreco').value) || Infinity;
+            let searchTerm = document.getElementById('searchBar').value.toLowerCase();
+            let jogos = document.querySelectorAll('.jogo');
+            
+            jogos.forEach(jogo => {
+                let preco = parseFloat(jogo.getAttribute('data-price'));
+                let nome = jogo.querySelector('h3').innerText.toLowerCase();
+                if (preco >= minPreco && preco <= maxPreco && nome.includes(searchTerm)) {
+                    jogo.style.display = 'block';
+                } else {
+                    jogo.style.display = 'none';
+                }
+            });
+        }
+        
+        function avaliarJogo(jogo, estrelas) {
+            jogo.querySelector('.avaliacao').innerText = `Avaliação: ${'★'.repeat(estrelas)}${'☆'.repeat(5 - estrelas)}`;
+        }
+        
+        function comprarJogo(jogo) {
+            alert(`Compra realizada para o jogo: ${jogo.querySelector('h3').innerText}`);
+        }
+        
+        function abrirTrailer(url) {
+            let modal = document.getElementById('trailerModal');
+            let video = document.getElementById('trailerVideo');
+            video.src = url;
+            modal.style.display = 'block';
+        }
+        
+        function fecharTrailer() {
+            let modal = document.getElementById('trailerModal');
+            let video = document.getElementById('trailerVideo');
+            video.src = "";
+            modal.style.display = 'none';
+        }
+    </script>
+</head>
+<body>
+    <header style="background: #333; color: white; padding: 10px; text-align: center;">
+        <h1>Hydra Shop</h1>
+<div id="versao-site">Versão 0.1 Alpha</div>
+    </header>
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Categorias</h2>
+            <p>Ação</p>
+            <p>Aventura</p>
+            <p>Indie</p>
+            <p>RPG</p>
+            <p>Offline</p>
+            <p>Online</p>
+            <p>Pagos</p>
+            <p>Gratuitos</p>
+            <p>Casual</p>
+            <p>Multiplayer</p>
+            
+            <h2>Filtrar por preço</h2>
+            <input type="number" id="minPreco" placeholder="Min €" oninput="filtrarJogos()">
+            <input type="number" id="maxPreco" placeholder="Max €" oninput="filtrarJogos()">
+            
+            <h2>Buscar Jogo</h2>
+            <input type="text" id="searchBar" placeholder="Digite o nome" oninput="filtrarJogos()">
+        </aside>
+        <div class="catalogo">
+            <!-- Jogo modelo -->
+            <div class="jogo" data-price="3.50" data-rating="0">
+                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/945360/header.jpg?t=1731953093" alt="Among Us">
+                <h3>Among Us</h3>
+                <p class="preco">€3,50 | R$ 22,53</p>
+                <p><strong>Requisitos Mínimos:</strong></p>
+                <ul>
+                    <li>Sistema Operativo: Windows 10 x32bit</li>
+                    <li>Processador: INTEL i3-4330</li>
+                    <li>Memória: 1 GB de RAM</li>
+                    <li>Placa Gráfica: INTEL HD Graphics 4600</li>
+                    <li>Desempenho: 30fps</li>
+                </ul>
+                <p><strong>Requisitos Recomendados:</strong></p>
+                <ul>
+                    <li>Sistema Operativo: Windows 10 x64bit</li>
+                    <li>Processador: INTEL i3-4330</li>
+                    <li>Memória: 4 GB de RAM</li>
+                    <li>Placa Gráfica: Nvidia GTX 650</li>
+                    <li>Desempenho: 60fps</li>
+                </ul>
+                <p class="avaliacao">Avaliação: ★★★★☆</p>
+                <button onclick="comprarJogo(this.parentElement)">Comprar</button>
+                <button onclick="abrirTrailer('https://video.fastly.steamstatic.com/store_trailers/257032139/movie480_vp9.webm?t=1718741653')">Ver Trailer</button>
+                <br>
+                <button onclick="avaliarJogo(this.parentElement, 1)">★</button>
+                <button onclick="avaliarJogo(this.parentElement, 2)">★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 3)">★★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 4)">★★★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 5)">★★★★★</button>
+            </div>
+<div class="jogo" data-price="3.50" data-rating="0">
+            <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/268910/header.jpg?t=1709068852" alt="Cuphead">
+            <h3>Cuphead</h3>
+            <p class="preco">€9,99 | R$ 50,99</p>
+            <p><strong>Requisitos Mínimos:</strong></p>
+            <ul>
+                <li>Sistema Operativo: Windows 7</li>
+                <li>Processador: Intel Core2 Duo E8400, 3.0GHz or AMD Athlon 64 X2
+6000+, 3.0GHz or higher</li>
+                <li>Memória: 3 GB de RAM</li>
+                <li>Placa Gráfica: Geforce 9600 GT or AMD HD 3870 512MB or higher</li>
+                <li>Desempenho: 30fps</li>
+            </ul>
+            <p><strong>Requisitos Recomendados:</strong></p>
+            <ul>
+                <li>Sistema Operativo: Requer um sistema operativo e processador de 64 bits</li>
+                <li>Desempenho: 60fps</li>
+            </ul>
+    <p class="avaliacao">Avaliação: ★★★★☆</p>
+    <button onclick="comprarJogo(this.parentElement)">Comprar</button>
+    <button onclick="abrirTrailer('https://video.fastly.steamstatic.com/store_trailers/256894191/movie480_vp9.webm?t=1656595223')">Ver Trailer</button>
+    <br>
+    <button onclick="avaliarJogo(this.parentElement, 1)">★</button>
+    <button onclick="avaliarJogo(this.parentElement, 2)">★★</button>
+    <button onclick="avaliarJogo(this.parentElement, 3)">★★★</button>
+    <button onclick="avaliarJogo(this.parentElement, 4)">★★★★</button>
+    <button onclick="avaliarJogo(this.parentElement, 5)">★★★★★</button>
+</div>
+ <div class="jogo" data-price="3.50" data-rating="0">
+            <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/751780/header.jpg?t=1699372258" alt="Forager">
+            <h3>Forager</h3>
+            <p class="preco">€4,99 | R$ 32,12</p>
+            <p><strong>Requisitos Mínimos:</strong></p>
+            <ul>
+                <li>Sistema Operativo: Windows XP</li>
+                <li>Processador: 1.2Ghz</li>
+                <li>Memória: 1024 MB de RAM</li>
+                <li>Placa Gráfica: 512MB</li>
+                <li>Desempenho: 30fps</li>
+            </ul>
+    <p class="avaliacao">Avaliação: ★★★★☆</p>
+    <button onclick="comprarJogo(this.parentElement)">Comprar</button>
+    <button onclick="abrirTrailer('https://video.fastly.steamstatic.com/store_trailers/256745580/movie480.webm?t=1552854543')">Ver Trailer</button>
+    <br>
+    <button onclick="avaliarJogo(this.parentElement, 1)">★</button>
+    <button onclick="avaliarJogo(this.parentElement, 2)">★★</button>
+    <button onclick="avaliarJogo(this.parentElement, 3)">★★★</button>
+    <button onclick="avaliarJogo(this.parentElement, 4)">★★★★</button>
+    <button onclick="avaliarJogo(this.parentElement, 5)">★★★★★</button>
+</div>
+<div class="jogo" data-price="3.50" data-rating="0">
+            <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/367520/header.jpg?t=1695270428" alt="Hollow Knight">
+            <h3>Hollow Knight</h3>
+            <p class="preco">€6,12 | R$ 37,98</p>
+            <p><strong>Requisitos Mínimos:</strong></p>
+            <ul>
+                <li>Sistema Operativo:  Windows 7 (64bit)</li>
+                <li>Processador:  Intel Core 2 Duo E5200</li>
+                <li>Memória: 4 GB de RAM</li>
+                <li>Placa Gráfica:  GeForce 9800GTX+ (1GB)
+</li>
+                <li>Desempenho: 30fps</li>
+            </ul>
+            <p><strong>Requisitos Recomendados:</strong></p>
+            <ul>
+                <li>Sistema Operativo: Windows 10 (64bit)</li>
+                <li>Processador: Intel Core i5</li>
+                <li>Memória: 8 GB de RAM</li>
+                <li>Placa Gráfica: GeForce GTX 560</li>
+                <li>Desempenho: 60fps</li>
+            </ul>
+    <p class="avaliacao">Avaliação: ★★★★☆</p>
+    <button onclick="comprarJogo(this.parentElement)">Comprar</button>
+    <button onclick="abrirTrailer('https://video.fastly.steamstatic.com/store_trailers/256679401/movie480.webm?t=1497589417')">Ver Trailer</button>
+    <br>
+    <button onclick="avaliarJogo(this.parentElement, 1)">★</button>
+    <button onclick="avaliarJogo(this.parentElement, 2)">★★</button>
+    <button onclick="avaliarJogo(this.parentElement, 3)">★★★</button>
+    <button onclick="avaliarJogo(this.parentElement, 4)">★★★★</button>
+    <button onclick="avaliarJogo(this.parentElement, 5)">★★★★★</button>
+</div>
+<div class="jogo" data-price="3.50" data-rating="0">
+            <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/413150/header.jpg?t=1711128146" alt="Stradew Valley">
+            <h3>Stardew Valley</h3>
+            <p class="preco">€11,99 | R$ 77,18</p>
+            <p><strong>Requisitos Mínimos:</strong></p>
+            <ul>
+                <li>Sistema Operativo: Windows Vista or greater</li>
+                <li>Processador: 2 Ghz</li>
+                <li>Memória: 2 GB de RAM</li>
+                <li>Placa Gráfica: 256 mb video </li>
+                <li>Desempenho: 30fps</li>
+            </ul>    
+<p class="avaliacao">Avaliação: ★★★★☆</p>
+    <button onclick="comprarJogo(this.parentElement)">Comprar</button>
+    <button onclick="abrirTrailer('https://video.fastly.steamstatic.com/store_trailers/256660296/movie480.webm?t=1454099186')">Ver Trailer</button>
+    <br>
+    <button onclick="avaliarJogo(this.parentElement, 1)">★</button>
+    <button onclick="avaliarJogo(this.parentElement, 2)">★★</button>
+    <button onclick="avaliarJogo(this.parentElement, 3)">★★★</button>
+    <button onclick="avaliarJogo(this.parentElement, 4)">★★★★</button>
+    <button onclick="avaliarJogo(this.parentElement, 5)">★★★★★</button>
+    </div>
+<div class="jogo" data-price="3.50" data-rating="0">
+                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/319510/header.jpg?t=1666889251" alt="Among Us">
+                <h3>Five Nights At Freddy's</h3>
+                <p class="preco">€2,99 | R$ 19,25</p>
+                <p><strong>Requisitos Mínimos:</strong></p>
+                <ul>
+                    <li>Sistema Operativo: XP,Vista,Windows7</li>
+                    <li>Processador: 2 GHz Intel Pentium 4 or AMD Athlon or equivalent</li>
+                    <li>Memória: 1 GB de RAM</li>
+                    <li>Placa Gráfica: 1 GB</li>
+                    <li>Desempenho: 30fps</li>
+                </ul>
+                <p class="avaliacao">Avaliação: ★★★★☆</p>
+                <button onclick="comprarJogo(this.parentElement)">Comprar</button>
+                <button onclick="abrirTrailer('https://video.fastly.steamstatic.com/store_trailers/2034033/movie480.webm?t=1447363301')">Ver Trailer</button>
+                <br>
+                <button onclick="avaliarJogo(this.parentElement, 1)">★</button>
+                <button onclick="avaliarJogo(this.parentElement, 2)">★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 3)">★★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 4)">★★★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 5)">★★★★★</button>
+            </div>
+<div class="jogo" data-price="3.50" data-rating="0">
+                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/332800/header.jpg?t=1579635993" alt="Five Night At Freddy's 2">
+                <h3>Five Nights At Freddy's 2</h3>
+                <p class="preco">€5,69 | R$ 36,63</p>
+                <p><strong>Requisitos Mínimos:</strong></p>
+                <ul>
+                    <li>Sistema Operativo: XP,Vista,Windows 7, Windows 8</li>
+                    <li>Processador: 2 GHz Intel Pentium 4 or AMD Athlon or equivalent</li>
+                    <li>Memória: 1 GB de RAM</li>
+                    <li>Placa Gráfica: 1 GB</li>
+                    <li>Desempenho: 30fps</li>
+                </ul>
+                <p class="avaliacao">Avaliação: ★★★★☆</p>
+                <button onclick="comprarJogo(this.parentElement)">Comprar</button>
+                <button onclick="abrirTrailer('https://video.fastly.steamstatic.com/store_trailers/2035458/movie480.webm?t=1447364949')">Ver Trailer</button>
+                <br>
+                <button onclick="avaliarJogo(this.parentElement, 1)">★</button>
+                <button onclick="avaliarJogo(this.parentElement, 2)">★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 3)">★★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 4)">★★★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 5)">★★★★★</button>
+            </div>
+<div class="jogo" data-price="3.50" data-rating="0">
+                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/354140/header.jpg?t=1579635991" alt="Five Night At Freddy's 3">
+                <h3>Five Nights At Freddy's 3</h3>
+                <p class="preco">€5,69 | R$ 36,63</p>
+                <p><strong>Requisitos Mínimos:</strong></p>
+                <ul>
+                    <li>Sistema Operativo: XP, Vista, Windows 7, Windows 8</li>
+                    <li>Processador: 2 GHz Intel Pentium 4 or AMD Athlon or equivalent</li>
+                    <li>Memória: 1 GB de RAM</li>
+                    <li>Placa Gráfica: 1 GB</li>
+                    <li>Desempenho: 30fps</li>
+                </ul>
+                <p class="avaliacao">Avaliação: ★★★★☆</p>
+                <button onclick="comprarJogo(this.parentElement)">Comprar</button>
+                <button onclick="abrirTrailer('https://video.fastly.steamstatic.com/store_trailers/2037604/movie480.webm?t=1447370194')">Ver Trailer</button>
+                <br>
+                <button onclick="avaliarJogo(this.parentElement, 1)">★</button>
+                <button onclick="avaliarJogo(this.parentElement, 2)">★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 3)">★★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 4)">★★★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 5)">★★★★★</button>
+            </div>
+<div class="jogo" data-price="3.50" data-rating="0">
+                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/388090/header.jpg?t=1579635988" alt="Five Night At Freddy's 4">
+                <h3>Five Nights At Freddy's 4</h3>
+                <p class="preco">€5,69 | R$ 36,63</p>
+                <p><strong>Requisitos Mínimos:</strong></p>
+                <ul>
+                    <li>Sistema Operativo: Win XP, 7, 8, Vista, 10</li>
+                    <li>Processador: 2 GHz Intel Pentium 4 or AMD Athlon or equivalent</li>
+                    <li>Memória: 2 GB de RAM</li>
+                    <li>Desempenho: 30fps</li>
+                </ul>
+                <p class="avaliacao">Avaliação: ★★★★☆</p>
+                <button onclick="comprarJogo(this.parentElement)">Comprar</button>
+                <button onclick="abrirTrailer('https://video.fastly.steamstatic.com/store_trailers/256654861/movie480.webm?t=1447377151')">Ver Trailer</button>
+                <br>
+                <button onclick="avaliarJogo(this.parentElement, 1)">★</button>
+                <button onclick="avaliarJogo(this.parentElement, 2)">★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 3)">★★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 4)">★★★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 5)">★★★★★</button>
+            </div>
+<div class="jogo" data-price="3.50" data-rating="0">
+                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/506610/header.jpg?t=1579635985" alt="Five Night At Freddy's Sister Location">
+                <h3>Five Nights At Freddy's Sister Location</h3>
+                <p class="preco">€5,69 | R$ 36,63</p>
+                <p><strong>Requisitos Mínimos:</strong></p>
+                <ul>
+                    <li>Sistema Operativo: Win XP, 7, 8, Vista, 10</li>
+                    <li>Processador:  2 GHz Intel Pentium 4 or AMD Athlon or equivalent</li>
+                    <li>Memória: 1 GB de RAM</li>
+                    <li>Placa Gráfica: 1 GB</li>
+                    <li>Desempenho: 30fps</li>
+                </ul>
+                <p class="avaliacao">Avaliação: ★★★★☆</p>
+                <button onclick="comprarJogo(this.parentElement)">Comprar</button>
+                <button onclick="abrirTrailer('https://video.fastly.steamstatic.com/store_trailers/256667465/movie480.webm?t=1470071643')">Ver Trailer</button>
+                <br>
+                <button onclick="avaliarJogo(this.parentElement, 1)">★</button>
+                <button onclick="avaliarJogo(this.parentElement, 2)">★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 3)">★★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 4)">★★★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 5)">★★★★★</button>
+            </div>
+<div class="jogo" data-price="3.50" data-rating="0">
+                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/731490/header.jpg?t=1742399696" alt="Crash Bandicoot™ N. Sane Trilogy">
+                <h3>Crash Bandicoot™ N. Sane Trilogy</h3>
+                <p class="preco">€22,99 | R$ 141,46</p>
+                <p><strong>Requisitos Mínimos:</strong></p>
+                <ul>
+                    <li>Sistema Operativo: Windows 7</li>
+                    <li>Processador:  Intel Core i5-750 @ 2.67GHz | AMD Phenom II X4 965 @ 3.4GHz</li>
+                    <li>Memória: 8 GB de RAM</li>
+                    <li>Placa Gráfica: NVIDIA GeForce GTX 660 2GB | AMD Radeon HD 7850 2GB</li>
+                    <li>Desempenho: 30fps</li>
+                </ul>
+                <p class="avaliacao">Avaliação: ★★★★☆</p>
+                <button onclick="comprarJogo(this.parentElement)">Comprar</button>
+                <button onclick="abrirTrailer('https://video.fastly.steamstatic.com/store_trailers/256711002/movie480.webm?t=1520629752')">Ver Trailer</button>
+                <br>
+                <button onclick="avaliarJogo(this.parentElement, 1)">★</button>
+                <button onclick="avaliarJogo(this.parentElement, 2)">★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 3)">★★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 4)">★★★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 5)">★★★★★</button>
+            </div>
+<div class="jogo" data-price="3.50" data-rating="0">
+                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/521890/header.jpg?t=1739547926" alt="Hello Neighbor">
+                <h3>Hello Neighbor</h3>
+                <p class="preco">€7,99 | R$ 49,17</p>
+                <p><strong>Requisitos Mínimos:</strong></p>
+                <ul>
+                    <li>Sistema Operativo: Windows 7 and up</li>
+                    <li>Processador: i5 and up</li>
+                    <li>Memória: 6 GB de RAM</li>
+                    <li>Placa Gráfica: GTX 770 and up</li>
+                    <li>Desempenho: 30fps</li>
+                </ul>
+                <p><strong>Requisitos Recomendados:</strong></p>
+                <ul>
+                    <li>Sistema Operativo: Windows 10</li>
+                    <li>Processador: i7</li>
+                    <li>Memória: 8 GB de RAM</li>
+                    <li>Placa Gráfica: GTX 1060</li>
+                    <li>Desempenho: 60fps</li>
+                </ul>
+
+                <p class="avaliacao">Avaliação: ★★★★☆</p>
+                <button onclick="comprarJogo(this.parentElement)">Comprar</button>
+                <button onclick="abrirTrailer('https://video.fastly.steamstatic.com/store_trailers/256699116/movie480.webm?t=1508938107')">Ver Trailer</button>
+                <br>
+                <button onclick="avaliarJogo(this.parentElement, 1)">★</button>
+                <button onclick="avaliarJogo(this.parentElement, 2)">★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 3)">★★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 4)">★★★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 5)">★★★★★</button>
+            </div>
+<div class="jogo" data-price="3.50" data-rating="0">
+                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1321680/header.jpg?t=1739397193" alt="Hello Neighbor 2">
+                <h3>Hello Neighbor 2</h3>
+                <p class="preco">€12,99 | R$ 79,93</p>
+                <p><strong>Requisitos Mínimos:</strong></p>
+                <ul>
+                    <li>Sistema Operativo:  Windows 10/11 x64</li>
+                    <li>Processador: Intel i3 4th gen / AMD Athlon X4 880K</li>
+                    <li>Memória: 6 GB de RAM</li>
+                    <li>Placa Gráfica: GeForce GTX 750 Ti / AMD Radeon HD 7850</li>
+                    <li>Desempenho: 30fps</li>
+                </ul>
+                <p><strong>Requisitos Recomendados:</strong></p>
+                <ul>
+                    <li>Sistema Operativo: Windows 10/11 x64</li>
+                    <li>Processador: Intel i5-4760 / AMD FX 9370</li>
+                    <li>Memória: 16 GB de RAM</li>
+                    <li>Placa Gráfica: GeForce GTX 1660 Ti / AMD Radeon RX Vega 56</li>
+                    <li>Desempenho: 60fps</li>
+                </ul>
+
+                <p class="avaliacao">Avaliação: ★★★★☆</p>
+                <button onclick="comprarJogo(this.parentElement)">Comprar</button>
+                <button onclick="abrirTrailer('https://video.fastly.steamstatic.com/store_trailers/256979428/movie480_vp9.webm?t=1698807660')">Ver Trailer</button>
+                <br>
+                <button onclick="avaliarJogo(this.parentElement, 1)">★</button>
+                <button onclick="avaliarJogo(this.parentElement, 2)">★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 3)">★★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 4)">★★★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 5)">★★★★★</button>
+            </div>
+<div class="jogo" data-price="3.50" data-rating="0">
+                <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/477160/601a86df5fb603914ec6ec06792abd0dc4abe4e8/header_alt_assets_24.jpg?t=1741867719" alt="Human Fall Flat">
+                <h3>Human Fall Flat</h3>
+                <p class="preco">€9,99 | R$ 61,47</p>
+                <p><strong>Requisitos Mínimos:</strong></p>
+                <ul>
+                    <li>Sistema Operativo: Windows XP/Vista/7/8/8.1/10 x86 and x64</li>
+                    <li>Processador: Intel Core2 Duo E6750 (2 * 2660) or equivalent | AMD Athlon 64 X2 Dual Core 6000+ (2 * 3000) or equivalent</li>
+                    <li>Memória: 1024 MB de RAM</li>
+                    <li>Placa Gráfica: GeForce GT 740 (2048 MB) or equivalent | Radeon HD 5770 (1024 MB)</li>
+                    <li>Desempenho: 30fps</li>
+                </ul>
+                <p><strong>Requisitos Recomendados:</strong></p>
+                <ul>
+                    <li>Sistema Operativo: Windows XP/Vista/7/8/8.1/10 x86 and x64</li>
+                    <li>Processador: Intel Core2 Quad Q9300 (4 * 2500) or equivalent | AMD A10-5800K APU (4*3800) or equivalent</li>
+                    <li>Memória: 2048 MB de RAM</li>
+                    <li>Placa Gráfica: GeForce GTX 460 (1024 MB) or equivalent | Radeon HD 7770 (1024 MB)</li>
+                    <li>Desempenho: 60fps</li>
+                </ul>
+
+                <p class="avaliacao">Avaliação: ★★★★☆</p>
+                <button onclick="comprarJogo(this.parentElement)">Comprar</button>
+                <button onclick="abrirTrailer('https://video.fastly.steamstatic.com/store_trailers/257113846/movie480_vp9.webm?t=1741867713')">Ver Trailer</button>
+                <br>
+                <button onclick="avaliarJogo(this.parentElement, 1)">★</button>
+                <button onclick="avaliarJogo(this.parentElement, 2)">★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 3)">★★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 4)">★★★★</button>
+                <button onclick="avaliarJogo(this.parentElement, 5)">★★★★★</button>
+            </div>
+
+
+    <!-- Modal para Trailer -->
+    <div id="trailerModal" class="trailer-modal">
+        <button class="close-btn" onclick="fecharTrailer()">Fechar</button>
+        <video id="trailerVideo" controls></video>
+    </div>
+<script>
+    // 🔹 Variável Global para o Link do Discord (troque aqui quando precisar)
+    const linkDiscord = "https://discord.gg/UXv3pWW3"; 
+
+    function comprarJogo(jogo) {
+        window.location.href = linkDiscord; // 🔹 Todos os botões vão usar esse link
+    }
+</script>
+
+</body>
+</html>
